@@ -19,8 +19,14 @@ def index(request):
 
         definition = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
         example = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['examples'][0]['text']
-        synonyms = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
+        synonyms = []
+        if 'synonyms' in results[0]['lexicalEntries'][0]['entries'][0]['senses'][0].keys():
+            synonyms_list = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
+            for item in synonyms_list:
+                synonyms.append(item['text'])
+
         pronunciation = results[0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
+
 
         return render(request,'index.html',{'definition':definition,'example': example,'synonyms':synonyms,'pronunciation':pronunciation})
 

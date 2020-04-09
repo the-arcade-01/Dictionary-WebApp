@@ -14,11 +14,11 @@ results = r.json()['results']
 
 definition = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
 example = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['examples'][0]['text']
-synonyms = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
+synonyms_list = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
 pronunciation = results[0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
 
 print(definition)
 print(example)
 print(pronunciation)
 for item in synonyms:
-    print(item['text'])
+    print(item)
