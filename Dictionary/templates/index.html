@@ -17,10 +17,27 @@
     <div class="container h-100 d-flex justify-content-center" style="height:300px">
         <h3>Type in the word</h3>
         <form action='/' method='POST' class='form-inline'>
+            {% csrf_token %}
             <input type='text' name='word' class='form-control mr-sm-2'>
             <input type="submit" value="GO" class="btn btn-outline-dark my-2 my-sm-0">
         </form>
     </div>
+
+    <div class="container h-100 d-flex justify-content-center" style="height:300px">
+        <h3>Definition : {{definition}}<h3><br>
+        <h3>Example : {{example}}<h3><br>
+        <h3>Synonyms : </h3><br>
+        <ul>
+            {% for item in synonyms %}
+                <li>{{item}}</li>
+            {% endfor %}
+        </ul>
+        <h3>Pronunciation : </h3>
+        <audio controls>
+            <source src="{{pronunciation}}" type="audio/mpeg">
+        </audio>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
