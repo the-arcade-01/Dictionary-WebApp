@@ -16,17 +16,20 @@ def index(request):
 
         results = r.json()['results']
         # print(json.dumps(results,indent=2,sort_keys=True))
-
-        definition = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
-        example = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['examples'][0]['text']
+        example = ''
         synonyms = []
+        definition = ''
+        pronunciation = None
+        if 'definitions' in results[0]['lexicalEntries'][0]['entries'][0]['senses'][0].keys():
+            definition = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
+        if 'examples' in results[0]['lexicalEntries'][0]['entries'][0]['senses'][0].keys():
+            example = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['examples'][0]['text']
         if 'synonyms' in results[0]['lexicalEntries'][0]['entries'][0]['senses'][0].keys():
             synonyms_list = results[0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
             for item in synonyms_list:
                 synonyms.append(item['text'])
-
-        pronunciation = results[0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
-
+        if 'pronunciations' in results[0]['lexicalEntries'][0].keys():
+            pronunciation = results[0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
 
         return render(request,'index.html',{'definition':definition,'example': example,'synonyms':synonyms,'pronunciation':pronunciation})
 

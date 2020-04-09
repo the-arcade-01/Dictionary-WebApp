@@ -26,21 +26,27 @@
     <div class="container h-100 d-flex justify-content-center" style="height:300px">
         <p>
             {% if definition %}
-                <h3>Definition : {{definition}}<h3><br>
+                <h4>Definition : {{definition}}<h4><br>
             {% endif %}
+        </p>
+        <p>
             {% if example %}
-                <h3>Example : {{example}}<h3><br>
+                <h4>Example : {{example}}<h4><br>
             {% endif %}
+        </p>
+        <p>
             {% if synonyms %}
-                <h3>Synonyms : </h3><br>
+                <h4>Synonyms : </h4><br>
                 <ul>
                     {% for item in synonyms %}
                         <li>{{item}}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
+        </p>
+        <p>
             {% if pronunciation %}
-                <h3>Pronunciation : </h3><br>
+                <h4>Pronunciation : </h4>
                 <audio controls>
                     <source src="{{pronunciation}}" type="audio/mpeg">
                 </audio>
