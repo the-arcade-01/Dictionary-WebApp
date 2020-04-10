@@ -12,9 +12,18 @@
     <title>
         Oxford Dictionary
     </title>
+    <style>
+body{
+    background: rgb(34, 32, 32);
+    color:white
+}
+
+    </style>
   </head>
   <body>
-    <div class="container h-100 d-flex justify-content-center" style="height:300px">
+      <header class="justify-content-center"><center><h2>Oxfrod Dictionary</h2></center></header>
+    <div class="container justify-content-left" styel="margin-top:5em;color: white">
+      
         <h3>Type in the word</h3>
         <form action='/' method='POST' class='form-inline'>
             {% csrf_token %}
@@ -23,35 +32,59 @@
         </form>
     </div>
 
-    <div class="container h-100 d-flex justify-content-center" style="height:300px">
-        <p>
-            {% if definition %}
-                <h4>Definition : {{definition}}<h4><br>
-            {% endif %}
-        </p>
-        <p>
-            {% if example %}
-                <h4>Example : {{example}}<h4><br>
-            {% endif %}
-        </p>
-        <p>
-            {% if synonyms %}
-                <h4>Synonyms : </h4><br>
-                <ul>
-                    {% for item in synonyms %}
-                        <li>{{item}}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </p>
-        <p>
-            {% if pronunciation %}
-                <h4>Pronunciation : </h4>
-                <audio controls>
-                    <source src="{{pronunciation}}" type="audio/mpeg">
-                </audio>
-            {% endif %}
-        </p>
+
+
+    <div class="container" style="margin:0 10em 0 10em;padding: 2em;">
+       <div class="row">
+        {% if word %}
+        <div class="col-lg-4">
+           <h2><u> {{word}}</u> :</h2>
+        </div>
+        {% endif %}
+        {% if pronunciation %}
+        <div class="col-lg-6" >
+            <audio controls >
+                <source src="{{pronunciation}}" type="audio/mpeg">
+            </audio>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+    <div class="container" style="margin:10em;padding: 2em;margin-top: 1em;">
+
+        {% if definition %}
+        <div class="row">
+            <div class="col-lg-4">
+                <h3><b>Definition :</b></h3>
+            </div>
+            <div class="col-lg-8">
+                {{definition}}
+            </div>
+        </div>
+        {% endif %}
+        {% if example %}
+        <div class="row">
+            <div class="col-lg-4">
+                <h3><b>Example :</b></h3>
+            </div>
+            <div class="col-lg-8">
+                {{example}}
+            </div>
+        </div>
+        {% endif %}
+        {% if synonyms %}
+        <div class="row">
+            <div class="col-lg-4">
+                <h3><b>Synonyms :</b></h3>
+            </div>
+            <div class="col-lg-8">
+               {% for synonym in synonyms %}
+                 {{synonym}} ,
+               {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 
     <!-- Optional JavaScript -->
