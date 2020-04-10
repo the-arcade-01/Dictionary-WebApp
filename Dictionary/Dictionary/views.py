@@ -31,7 +31,7 @@ def index(request):
         if 'pronunciations' in results[0]['lexicalEntries'][0].keys():
             pronunciation = results[0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
 
-        return render(request,'index.html',{'definition':definition,'example': example,'synonyms':synonyms,'pronunciation':pronunciation})
+        return render(request,'index.html',{'definition':definition,'example': example,'synonyms':synonyms,'pronunciation':pronunciation, 'word':word_id})
 
     return render(request,'index.html')
 
