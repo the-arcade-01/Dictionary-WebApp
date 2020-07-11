@@ -9,44 +9,34 @@
         <input type="submit" value="GO" class="btn btn-outline-dark my-2 my-sm-0">
     </form>
 </div>
+<div class="container " style="margin:0 10em 0 10em;padding: 2em;">
 
-<div class="container" style="margin:0 10em 0 10em;padding: 2em;">
+    <div class="row" id="error">
+
+    </div>
+</div>
+
+<div class="container " style="margin:0 10em 0 10em;padding: 2em;">
+
     <div class="row">
         <div class="col-lg-4">
-            <h2><u id="word"> </u> :</h2>
+            <h2 id="word"></h2>
         </div>
-        <div class="col-lg-6">
-            <audio controls>
-                <source src="{{pronunciation}}" type="audio/mpeg">
-            </audio>
+        <div class="col-lg-6" id="pronunciation">
+
         </div>
     </div>
 </div>
 <div class="container" style="margin:10em;padding: 2em;margin-top: 1em;">
 
-    <div class="row">
-        <div class="col-lg-4">
-            <h3><b>Definition :</b></h3>
-        </div>
-        <div class="col-lg-8">
-            {{definition}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <h3><b>Example :</b></h3>
-        </div>
-        <div class="col-lg-8">
-            {{example}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <h3><b>Synonyms :</b></h3>
-        </div>
-        <div class="col-lg-8">
+    <div class="row" id="defination">
 
-        </div>
+    </div>
+    <div class="row" id='example'>
+
+    </div>
+    <div class="row" id="synonyms">
+
     </div>
 
 </div>
@@ -64,10 +54,65 @@
         xhr.responseType = "json"
         xhr.open(method, url)
         xhr.onload = () => {
-            // console.log(xhr.response)
+            console.log(xhr.response)
             res = xhr.response
+            if (res.error) {
+                const errorEl = document.getElementById("error")
+                document.getElementById("word").innerHTML = ""
+                document.getElementById("defination").innerHTML = ""
+                document.getElementById("example").innerHTML = ""
+                document.getElementById("synonyms").innerHTML = ""
+
+                errorEl.innerHTML = `<h3>error:${res.error}</h3>`
+                return
+            }
+            document.getElementById("error").innerHTML = ""
             const word = document.getElementById("word")
-            word.innerHTML = `<h1>${res.word}:</h1>`
+            word.innerHTML = `<u>${res.word}:</u>`
+
+            if (res.pronunciation) {
+                const pronunciation = document.getElementById("pronunciation")
+                pronunciation.innerHTML = ` <audio controls>
+                <source src=${res.pronunciation} type="audio/mpeg">
+                </audio>`
+            }
+
+            if (res.definition) {
+                const defination = document.getElementById("defination")
+                defination.innerHTML =
+                    `<div class="col-lg-4">
+                <h3><b>Defination :</b></h3>
+                </div>
+                <div class="col-lg-8">
+                    ${res.definition}
+                </div>`
+            }
+
+            if (res.example) {
+                const example = document.getElementById("example")
+                example.innerHTML = `<div class="col-lg-4">
+                <h3><b>Example :</b></h3>
+                </div>
+                <div class="col-lg-8">
+                    ${res.example}
+                </div>`
+            }
+
+
+            if (res.synonyms.length != 0) {
+                synonyms = document.getElementById("synonyms")
+                synonyms.innerHTML = `<div class="col-lg-4">
+                                        <h3><b>Synonyms :</b></h3>
+                                    </div>
+                                    <div class="col-lg-8">`
+
+                res.synonyms.map((synonym) => {
+                    synonyms.innerHTML += synonym + ", "
+                })
+
+                synonyms.innerHTML += `</div>`
+
+            }
         }
         xhr.send(formdata)
 

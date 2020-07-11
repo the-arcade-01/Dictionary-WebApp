@@ -18,6 +18,7 @@ def dict_view(request, *args, **kwargs):
     if request.method == "POST":
         data = request.POST.copy()
         word_id = data.get("word")
+        # word_id = "plauge"
         if word_id:
             url = (
                 "https://od-api.oxforddictionaries.com:443/api/v2/entries/"
@@ -25,7 +26,10 @@ def dict_view(request, *args, **kwargs):
                 + "/"
                 + word_id.lower()
             )
+
             r = requests.get(url, headers={"app_id": app_id, "app_key": app_key})
+            if "error" in r.json():
+                return JsonResponse({"error": r.json()["error"]})
 
             results = r.json()["results"]
             # print(json.dumps(results,indent=2,sort_keys=True))
@@ -68,7 +72,8 @@ def dict_view(request, *args, **kwargs):
                     "synonyms": synonyms,
                     "pronunciation": pronunciation,
                     "word": word_id,
-                },
+                }
             )
+            return JsonResponse(r.json())
         return JsonResponse({"error": "word must be provided"})
 
