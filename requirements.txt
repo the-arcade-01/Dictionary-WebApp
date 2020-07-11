@@ -1,3 +1,29 @@
-Django==3.0.7
+
+appdirs==1.4.3
+asgiref==3.2.10
+astroid @ file:///tmp/build/80754af9/astroid_1592495881661/work
+attrs==19.3.0
+black==19.10b0
+certifi==2020.6.20
+chardet==3.0.4
+click==7.1.2
+Django==3.0.3
+
 gunicorn==20.0.4
+idna==2.7
+isort==4.3.21
+lazy-object-proxy==1.4.3
+mccabe==0.6.1
+mypy-extensions==0.4.3
+pathspec==0.7.0
+pylint @ file:///tmp/build/80754af9/pylint_1592496044040/work
+pytz==2020.1
+regex @ file:///tmp/build/80754af9/regex_1593435542598/work
 requests==2.20.0
+six==1.15.0
+sqlparse==0.3.1
+toml @ file:///tmp/build/80754af9/toml_1592853716807/work
+typed-ast==1.4.1
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1592847887441/work
+urllib3==1.24.3
+wrapt==1.11.2

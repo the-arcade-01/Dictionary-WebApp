@@ -1,96 +1,125 @@
-<!Doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{%extends 'base.html'%}
+{%block content%}
+<div class="container justify-content-left" styel="margin-top:5em;color: white">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <h3>Type in the word</h3>
+    <form action='/api/' method='POST' class='form-inline' id="dictform">
+        {% csrf_token %}
+        <input type='text' name='word' class='form-control mr-sm-2'>
+        <input type="submit" value="GO" class="btn btn-outline-dark my-2 my-sm-0">
+    </form>
+</div>
+<div class="container " style="margin:0 10em 0 10em;padding: 2em;">
 
-    <title>
-        Oxford Dictionary
-    </title>
-    <style>
-body{
-    background: rgb(34, 32, 32);
-    color:white
-}
+    <div class="row" id="error">
 
-    </style>
-  </head>
-  <body>
-      <header class="justify-content-center"><center><h2>Oxford Dictionary</h2></center></header>
-    <div class="container justify-content-left" styel="margin-top:5em;color: white">
-
-        <h3>Type in the word</h3>
-        <form action='/' method='POST' class='form-inline'>
-            {% csrf_token %}
-            <input type='text' name='word' class='form-control mr-sm-2'>
-            <input type="submit" value="GO" class="btn btn-outline-dark my-2 my-sm-0">
-        </form>
     </div>
+</div>
 
+<div class="container " style="margin:0 10em 0 10em;padding: 2em;">
 
-
-    <div class="container" style="margin:0 10em 0 10em;padding: 2em;">
-       <div class="row">
-        {% if word %}
+    <div class="row">
         <div class="col-lg-4">
-           <h2><u> {{word}}</u> :</h2>
+            <h2 id="word"></h2>
         </div>
-        {% endif %}
-        {% if pronunciation %}
-        <div class="col-lg-6" >
-            <audio controls >
-                <source src="{{pronunciation}}" type="audio/mpeg">
-            </audio>
-        </div>
-        {% endif %}
-    </div>
-    </div>
-    <div class="container" style="margin:10em;padding: 2em;margin-top: 1em;">
+        <div class="col-lg-6" id="pronunciation">
 
-        {% if definition %}
-        <div class="row">
-            <div class="col-lg-4">
-                <h3><b>Definition :</b></h3>
-            </div>
-            <div class="col-lg-8">
-                {{definition}}
-            </div>
         </div>
-        {% endif %}
-        {% if example %}
-        <div class="row">
-            <div class="col-lg-4">
+    </div>
+</div>
+<div class="container" style="margin:10em;padding: 2em;margin-top: 1em;">
+
+    <div class="row" id="defination">
+
+    </div>
+    <div class="row" id='example'>
+
+    </div>
+    <div class="row" id="synonyms">
+
+    </div>
+
+</div>
+
+<script>
+    const form = document.getElementById("dictform");
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = event.target
+        const formdata = new FormData(form)
+        const url = form.getAttribute("action")
+        const method = form.getAttribute("method")
+
+        const xhr = new XMLHttpRequest()
+        xhr.responseType = "json"
+        xhr.open(method, url)
+        xhr.onload = () => {
+            console.log(xhr.response)
+            res = xhr.response
+            if (res.error) {
+                const errorEl = document.getElementById("error")
+                document.getElementById("word").innerHTML = ""
+                document.getElementById("defination").innerHTML = ""
+                document.getElementById("example").innerHTML = ""
+                document.getElementById("synonyms").innerHTML = ""
+
+                errorEl.innerHTML = `<h3>error:${res.error}</h3>`
+                return
+            }
+            document.getElementById("error").innerHTML = ""
+            const word = document.getElementById("word")
+            word.innerHTML = `<u>${res.word}:</u>`
+
+            if (res.pronunciation) {
+                const pronunciation = document.getElementById("pronunciation")
+                pronunciation.innerHTML = ` <audio controls>
+                <source src=${res.pronunciation} type="audio/mpeg">
+                </audio>`
+            }
+
+            if (res.definition) {
+                const defination = document.getElementById("defination")
+                defination.innerHTML =
+                    `<div class="col-lg-4">
+                <h3><b>Defination :</b></h3>
+                </div>
+                <div class="col-lg-8">
+                    ${res.definition}
+                </div>`
+            }
+
+            if (res.example) {
+                const example = document.getElementById("example")
+                example.innerHTML = `<div class="col-lg-4">
                 <h3><b>Example :</b></h3>
-            </div>
-            <div class="col-lg-8">
-                {{example}}
-            </div>
-        </div>
-        {% endif %}
-        {% if synonyms %}
-        <div class="row">
-            <div class="col-lg-4">
-                <h3><b>Synonyms :</b></h3>
-            </div>
-            <div class="col-lg-8">
-               {% for synonym in synonyms %}
-                 {{synonym}} ,
-               {% endfor %}
-            </div>
-        </div>
-        {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    ${res.example}
+                </div>`
+            }
 
-    </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
-</html>
+            if (res.synonyms.length != 0) {
+                synonyms = document.getElementById("synonyms")
+                synonyms.innerHTML = `<div class="col-lg-4">
+                                        <h3><b>Synonyms :</b></h3>
+                                    </div>
+                                    <div class="col-lg-8">`
+
+                res.synonyms.map((synonym) => {
+                    synonyms.innerHTML += synonym + ", "
+                })
+
+                synonyms.innerHTML += `</div>`
+
+            }
+        }
+        xhr.send(formdata)
+
+    })
+
+
+
+</script>
+
+{%endblock content%}
